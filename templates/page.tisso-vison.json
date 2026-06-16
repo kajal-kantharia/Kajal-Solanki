@@ -1,0 +1,131 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "vison-header": {
+      "type": "vison-header",
+      "settings": {
+        "container": false,
+        "container_width": "1280px",
+        "background_color": "#f5f5f5",
+        "padding_top": 10,
+        "padding_bottom": 10,
+        "mobile_padding_top": 0,
+        "mobile_padding_bottom": 0,
+        "logo": "shopify://shop_images/Group_1000007777.svg",
+        "logo_width": 150,
+        "logo_width_mobile": 110,
+        "text": "Find the ideal gift for your loved ones.",
+        "text_family": "jost_n4",
+        "text_size": 16,
+        "text_alignment": "center",
+        "text_color": "#000000",
+        "button_label": "CHOOSE GIFT",
+        "button_link": "/products/tissot-vison",
+        "button_open_new_tab": false,
+        "button_full_width": true,
+        "button_bg_color": "#fff544",
+        "button_text_color": "#000000",
+        "button_border_width": 0,
+        "button_border_color": "#000000",
+        "button_border_radius": 0,
+        "button_padding_x": 30,
+        "button_padding_y": 8,
+        "button_font_size": 16,
+        "button_font_size_mobile": 14,
+        "button_font_family": "jost_n4"
+      }
+    },
+    "vison_banner_tAh8ch": {
+      "type": "vison-banner",
+      "blocks": {
+        "slide_GwAVBf": {
+          "type": "slide",
+          "settings": {
+            "image_desktop": "shopify://shop_images/Group_1000008197.png",
+            "image_mobile": "shopify://shop_images/image_1.png",
+            "content_position_desktop": "bottom-left",
+            "content_position_mobile": "top-center",
+            "text_alignment_desktop": "left",
+            "text_alignment_mobile": "center",
+            "content_width": 540,
+            "content_padding_x": 48,
+            "content_padding_y": 48,
+            "heading": "The Gift Guide",
+            "heading_size": 70,
+            "heading_size_mobile": 30,
+            "heading_spacing": 20,
+            "heading_color": "#000000",
+            "heading_font_family": "jost_n5",
+            "description": "<p>Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.</p>",
+            "description_size": 20,
+            "description_size_mobile": 16,
+            "description_spacing": 32,
+            "description_font_family": "jost_n4",
+            "description_color": "#000000",
+            "show_button": true,
+            "button_label": "SHOP NOW",
+            "button_link": "shopify://collections",
+            "button_open_new_tab": false,
+            "button_bg": "#000000",
+            "button_color": "#ffffff",
+            "button_bg_hover_color": "#fff544",
+            "button_border_width": 0,
+            "button_border": "#000000",
+            "button_radius": 0,
+            "button_padding_x": 30,
+            "button_padding_y": 8,
+            "button_font_size": 16,
+            "button_font_size_mobile": 14,
+            "button_font_family": "jost_n4"
+          }
+        }
+      },
+      "block_order": [
+        "slide_GwAVBf"
+      ],
+      "name": "Vison Banner",
+      "settings": {
+        "height_desktop": 780,
+        "height_mobile": 440,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "mobile_padding_top": 0,
+        "mobile_padding_bottom": 0,
+        "autoplay": true,
+        "autoplay_speed": 2000,
+        "loop": true,
+        "transition_speed": 600,
+        "effect": "slide",
+        "show_navigation": false,
+        "navigation_color": "#000000",
+        "show_pagination": true,
+        "pagination_color": "#000000",
+        "show_arrow": true,
+        "padding_top_message_desktop": 8,
+        "padding_bottom_message_desktop": 8,
+        "padding_top_message_mobile": 5,
+        "padding_bottom_message_mobile": 5,
+        "bg_color": "#f5f5f5",
+        "message": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL",
+        "message_mobile": "SUSTAINABLE, ETHICALLY MADE ACTIVEWEAR",
+        "message_size": 16,
+        "message_size_mobile": 14,
+        "message_color": "#000000",
+        "message_font_family": "jost_n4",
+        "text_alignment": "center"
+      }
+    }
+  },
+  "order": [
+    "vison-header",
+    "vison_banner_tAh8ch"
+  ]
+}
