@@ -7,7 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
- {
+{
   "sections": {
     "vison-header": {
       "type": "vison-header",
@@ -56,8 +56,6 @@
             "text_alignment_desktop": "left",
             "text_alignment_mobile": "center",
             "content_width": 540,
-            "content_padding_x": 0,
-            "content_padding_y": 40,
             "heading": "The Gift Guide",
             "heading_size": 70,
             "heading_size_mobile": 30,
