@@ -1,0 +1,414 @@
+.vison-products-grid__heading {
+    margin: 0;
+}
+
+.vison-products-grid__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--stl-gap, 16px);
+}
+
+.vison-products-grid__item {
+    position: relative;
+    overflow: hidden;
+    min-height: 0;
+    background: rgba(#fff, 0.04);
+}
+
+.vison-products-grid__media-wrapper {
+    aspect-ratio: var(--stl-aspect-ratio, 1 / 1);
+    overflow: hidden;
+}
+
+.vison-products-grid__media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    display: block;
+    object-position: var(--stl-image-position, center);
+}
+
+.vison-products-grid__placeholder {
+    width: 100%;
+    aspect-ratio: var(--stl-aspect-ratio, 1 / 1);
+    background: rgba(#fff, 0.04);
+}
+
+.vison-products-grid__hotspot {
+    position: absolute;
+    top: var(--hotspot-y, 50%);
+    left: var(--hotspot-x, 50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: #111;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    transition: transform 180ms ease, background-color 180ms ease;
+    z-index: 2;
+}
+
+.vison-products-grid__hotspot:hover,
+.vison-products-grid__hotspot:focus-visible {
+    background: #fff;
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
+.vison-products-grid__hotspot[disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+
+.vison-products-grid__hotspot-icon::before,
+.vison-products-grid__hotspot-icon::after {
+    content: "";
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    width: 12px;
+    height: 2px;
+    background: #000;
+    transform: translate(-50%, -50%);
+}
+
+.vison-products-grid__hotspot-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.vison-products-grid-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.vison-products-grid-modal.is-open {
+    display: flex;
+}
+
+.vison-products-grid-modal__overlay {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    border: 0;
+    background: rgba(0, 0, 0, 0.38);
+    cursor: pointer;
+}
+
+.vison-products-grid-modal__dialog {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 318px);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    color: #000000;
+    background-color: #fff;
+    padding: 36px 23px 28px;
+    box-shadow: 0px 2px 4px 0px #00000033;
+    font-family: Jost, sans-serif;
+}
+
+.vison-products-grid-modal__close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+    font-size: 25px;
+    background-color: #fff;
+}
+
+.vison-products-grid-modal__close svg {
+    width: 15px;
+    height: 15px;
+}
+
+.vison-products-grid-modal__product {
+    display: flex;
+    gap: 9px;
+    align-items: start;
+    margin-block-end: 9px;
+}
+
+.vison-products-grid-modal__image {
+    display: block;
+    width: 120px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.vison-products-grid-modal__title {
+    margin: 3px 10px 7px 0;
+    font-size: 16px;
+    font-family: Jost, sans-serif;
+    font-weight: 300;
+    line-height: 1.28;
+}
+
+.vison-products-grid-modal__price {
+    font-size: 16px;
+    line-height: 1.2;
+    font-family: Lustria, sans-serif;
+    font-weight: 400;
+}
+
+.vison-products-grid-modal__description {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.18;
+    font-family: Jost, sans-serif;
+    font-weight: 300;
+}
+
+.vison-products-grid-modal__option {
+    margin-block: 0 13px;
+}
+
+.vison-products-grid-modal__label {
+    display: block;
+    margin-block-end: 6px;
+    font-size: 13px;
+    line-height: 1;
+}
+
+.vison-products-grid-modal__swatches {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.vison-products-grid-modal__swatch {
+    position: relative;
+    display: block;
+    min-height: 40px;
+    border: .5px solid #000000;
+    background: transparent;
+    color: #000;
+    text-align: left;
+    cursor: pointer;
+}
+
+.vison-products-grid-modal__swatch:first-child {
+    border-right: 0;
+}
+
+.vison-products-grid-modal__swatch input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.vison-products-grid-modal__swatch span {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 8px 12px 8px 14px;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.vison-products-grid-modal__swatch span::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 5px;
+    background: var(--swatch-color, #fff);
+    border-right: .5px solid #000;
+}
+
+.vison-products-grid-modal__swatch input:checked + span {
+    background: #000;
+    color: #fff;
+}
+
+.vison-products-grid-modal__swatch:focus-within span {
+    outline: 0px solid #000;
+    outline-offset: -2px;
+}
+
+.vison-products-grid-modal__select-wrap {
+    position: relative;
+}
+
+.vison-products-grid-modal__select {
+    width: 100%;
+    height: 40px;
+    min-height: 40px;
+    padding: 8px 56px 8px 12px;
+    border: 1px solid #8d8d8d;
+    border-radius: 0;
+    background: transparent;
+    color: currentColor;
+    font-size: 16px;
+    line-height: 1;
+    appearance: none;
+}
+
+.vison-products-grid-modal__select-wrap::before {
+    content: "";
+    position: absolute;
+    top: 1px;
+    right: 54px;
+    bottom: 1px;
+    width: 1px;
+    background: #8d8d8d;
+    pointer-events: none;
+}
+
+.vison-products-grid-modal__select-wrap::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 21px;
+    width: 10px;
+    height: 10px;
+    border-right: 1.7px solid currentColor;
+    border-bottom: 1.7px solid currentColor;
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+}
+
+.vison-products-grid-modal__button,
+.vison-products-grid-modal__button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 12px 30px;
+    border-radius: 0px;
+    background-color: #000;
+    color: #fff;
+    border: 0px solid #000;
+    text-transform: uppercase;
+    transition: all .3s;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    font-family: Jost, sans-serif;
+}
+
+.vison-product__button_text {
+    margin-right: 10px;
+}
+
+.vison-products-grid-modal__button::before,
+.vison-products-grid-modal__button::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background-color: #fff544;
+    border-radius: inherit;
+    transition: all 0.3s;
+    z-index: -1;
+}
+
+.vison-products-grid-modal__button:hover,
+.vison-products-grid-modal__button:hover {
+    color: #000;
+    opacity: 0.85;
+}
+
+.vison-products-grid-modal__button:hover::before,
+.vison-products-grid-modal__button:hover::before {
+    width: 100%;
+}
+
+.vison-products-grid-modal__button svg {
+    width: 40px;
+    height: auto;
+}
+
+.vison-products-grid-modal__button svg,
+.vison-products-grid-modal__button svg path,
+.vison-products-grid-modal__button svg polygon {
+    fill: #fff;
+}
+
+.vison-products-grid-modal__button:hover svg,
+.vison-products-grid-modal__button:hover svg path,
+.vison-products-grid-modal__button:hover svg polygon {
+    fill: #000;
+}
+
+.vison-products-grid-modal__button[disabled],
+.vison-products-grid-modal__button[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.55;
+    color: #fff;
+}
+
+.vison-products-grid-modal__button[disabled] svg,
+.vison-products-grid-modal__button[disabled] svg path,
+.vison-products-grid-modal__button[disabled] svg polygon {
+    fill: #fff;
+}
+
+.vison-products-grid-modal__button[disabled]::before,
+.vison-products-grid-modal__button[aria-disabled="true"]::before {
+    display: none;
+}
+
+.vison-products-grid-modal__message {
+    margin: 10px 0 0;
+    font-size: 13px;
+}
+
+body.vison-products-grid-modal-open {
+    overflow: hidden;
+}
+
+@media screen and (min-width: 750px) {
+    .vison-products-grid__inner {
+        padding-inline: 50px;
+    }
+
+    .vison-products-grid__grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media screen and (max-width: 749px) {
+    .vison-products-grid__inner,
+    .vison-products-grid-modal {
+        padding: 10px;
+    }
+
+    .vison-products-grid-modal__dialog {
+        width: 100%;
+        padding: 18px;
+    }
+
+    .vison-products-grid-modal__product {
+        grid-template-columns: 100px 1fr;
+    }
+    .vison-products-grid__grid {
+        gap: var(--stl-gap-mobile, 5px);
+    }
+
+    .vison-products-grid__hotspot {
+        top: 20% !important;
+        left: 75% !important;
+    }
+}

@@ -1,0 +1,471 @@
+{%- comment -%}
+  Vison Header Section
+  --------------------
+  A three-column header bar: Logo | Text | Button
+
+  Structure:
+    - Logo block  → first column (image or shop name fallback)
+    - Text block  → middle column (tagline / announcement)
+    - Button block → last column (CTA link)
+
+  Styling approach:
+    - Static layout styles live in assets/vison-header.css
+    - Merchant-controlled values are output as CSS custom properties below
+      so one stylesheet works for every section instance
+    - Theme button classes (button--primary / button--secondary) are used
+      unless "Use custom button colors" is enabled in the editor
+
+  All settings are defined in the {% schema %} block at the bottom of this file.
+{%- endcomment -%}
+
+{{ 'vison-header.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .vison-header-{{ section.id }} {
+    {%- if section.settings.background_color != blank and section.settings.background_color != 'rgba(0,0,0,0)' -%}
+      background-color: {{ section.settings.background_color }};
+    {%- endif -%}
+    --vison-header-gap: {{ section.settings.content_gap }}px;
+    --vison-header-text-color: {{ section.settings.text_color }};
+    --vison-header-text-size: {{ section.settings.text_size }}px;
+    --vison-header-logo-width: {{ section.settings.logo_width }}px;
+    --vison-header-logo-width-mobile: {{ section.settings.logo_width_mobile }}px;
+    --vison-header-btn-bg: {{ section.settings.button_bg_color }};
+    --vison-header-btn-text: {{ section.settings.button_text_color }};
+    --vison-header-btn-border-width: {{ section.settings.button_border_width }}px;
+    --vison-header-btn-border: {{ section.settings.button_border_color }};
+    --vison-header-btn-radius: {{ section.settings.button_border_radius }}px;
+    --vison-header-btn-padding-x: {{ section.settings.button_padding_x }}px;
+    --vison-header-btn-padding-y: {{ section.settings.button_padding_y }}px;
+    --vison-header-btn-font-size: {{ section.settings.button_font_size }}px;
+    --vison-header-text-font: {{ section.settings.text_family.family }}, {{ section.settings.text_family.fallback_families }};
+    --vison-header-btn-font: {{ section.settings.button_font_family.family }}, {{ section.settings.button_font_family.fallback_families }};
+    --vison-header-btn-font-size-mobile: {{ section.settings.button_font_size_mobile }}px;
+  }
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.mobile_padding_top }}px;
+    padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+  }
+
+  .vison-header-{{ section.id }} .container {
+    max-width: {{ section.settings.container_width }};
+    margin: 0 auto;
+    padding: 0 15px;
+    width: 100%;
+  }
+
+  .vison-header-{{ section.id }} .fluid-container {
+    padding: 0 15px;
+    width: 100%;
+  }
+
+  .vison-header-{{ section.id }} .vison-header__drawer {
+    {%- if section.settings.background_color != blank and section.settings.background_color != 'rgba(0,0,0,0)' -%}
+      background-color: {{ section.settings.background_color }};
+    {%- endif -%}
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<header
+  class="vison-header vison-header-{{ section.id }} color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+  id="VisonHeader-{{ section.id }}"
+>
+  <div class="{% if section.settings.container %}fluid-container{% else %}container{% endif %}">
+    <div class="vison-header__mobile-top">
+      <button
+        class="vison-header__mobile-toggle"
+        type="button"
+        aria-label="Open menu"
+      >
+          {{ 'burger.svg' | inline_asset_content | class: 'vison-header__menu-icon' | replace: '<svg', '<svg class="vison-header__menu-icon"' }}
+          {{ 'close.svg' | inline_asset_content | class: 'vison-header__close-icon' | replace: '<svg', '<svg class="vison-header__close-icon"' }}
+      </button>
+
+      {% if section.settings.logo != blank %}
+        <a href="{{ shop.url }}" class="vison-header__logo-link">
+          {{
+            section.settings.logo
+            | image_url: width: 600
+            | image_tag: class: 'vison-header__logo-image', loading: 'eager'
+          }}
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="vison-header__drawer">
+      {% if section.settings.text != blank %}
+        <p class="vison-header__text">
+          {{ section.settings.text }}
+        </p>
+      {% endif %}
+
+      {%- if section.settings.button_label != blank -%}
+        <div class="vison-header__button">
+          <a
+            {% if section.settings.button_link == blank %}
+              role="link" aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.button_link }}"
+            {% endif %}
+            class="vison-header__btn"
+            {% if section.settings.button_open_new_tab and section.settings.button_link != blank %}
+              target="_blank" rel="noopener noreferrer"
+            {% endif %}
+          >
+            <span class="vison-header__button_text">
+              {{- section.settings.button_label | escape -}}
+            </span>
+            {{- 'arrow.svg' | inline_asset_content -}}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="vison-header__content">
+      {%- comment -%} ── Block 1: Logo ── {%- endcomment -%}
+      {%- if section.settings.logo != blank -%}
+        <a href="{{ shop.url }}" class="vison-header__logo-link">
+          {%- comment -%} Alt text priority: image alt → shop name {%- endcomment -%}
+          {%- assign logo_alt = section.settings.logo_alt | default: shop.name | escape -%}
+          {%- assign logo_height = section.settings.logo_width | divided_by: section.settings.logo.aspect_ratio -%}
+          {%- capture logo_sizes -%}
+            (max-width: 749px) {{ section.settings.logo_width_mobile }}px, {{ section.settings.logo_width }}px
+          {%- endcapture -%}
+          {%- capture logo_widths -%}
+            {{ section.settings.logo_width_mobile }}, {{ section.settings.logo_width }}, {{ section.settings.logo_width | times: 2 }}
+          {%- endcapture -%}
+
+          {{
+            section.settings.logo
+            | image_url: width: 600
+            | image_tag:
+              class: 'vison-header__logo-image',
+              widths: logo_widths,
+              sizes: logo_sizes,
+              width: section.settings.logo_width,
+              height: logo_height,
+              alt: logo_alt,
+              loading: 'eager',
+              fetchpriority: 'high'
+          }}
+        </a>
+      {%- else -%}
+        {%- comment -%} No logo uploaded — show shop name as text fallback {%- endcomment -%}
+        <span class="vison-header__logo-text h2">{{ shop.name }}</span>
+      {%- endif -%}
+
+      {%- comment -%}
+        ── Block 2: Text ──
+        Hidden when the text field is empty
+      {%- endcomment -%}
+      {%- if section.settings.text != blank -%}
+        <p class="vison-header__text" style="text-align: {{ section.settings.text_alignment }}">
+          {{ section.settings.text }}
+        </p>
+      {%- endif -%}
+
+      {%- comment -%} ── Block 3: Button ── {%- endcomment -%}
+      {%- if section.settings.button_label != blank -%}
+        <div class="vison-header__button">
+          <a
+            {% if section.settings.button_link == blank %}
+              role="link" aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.button_link }}"
+            {% endif %}
+            class="vison-header__btn"
+            {% if section.settings.button_open_new_tab and section.settings.button_link != blank %}
+              target="_blank" rel="noopener noreferrer"
+            {% endif %}
+          >
+            <span class="vison-header__button_text">
+              {{- section.settings.button_label | escape -}}
+            </span>
+            {{- 'arrow.svg' | inline_asset_content -}}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</header>
+
+{% javascript %}
+  document.querySelectorAll('.vison-header').forEach((header) => {
+    const toggle = header.querySelector('.vison-header__mobile-toggle');
+    const drawer = header.querySelector('.vison-header__drawer');
+
+    if (!toggle || !drawer) return;
+
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('is-open');
+      drawer.classList.toggle('is-open');
+    });
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Vison Header",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "container",
+      "label": "Full width container?",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "container_width",
+      "label": "Container Width in PX",
+      "default": "1280px"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color override"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top - Mobile",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom - Mobile",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "label": "Logo width (desktop)",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "logo_width_mobile",
+      "min": 40,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Logo width (mobile)",
+      "default": 90
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "Your tagline or announcement here"
+    },
+    {
+      "type": "font_picker",
+      "id": "text_family",
+      "label": "Text Font Family",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_open_new_tab",
+      "default": false,
+      "label": "Open button link in new tab"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_full_width",
+      "default": false,
+      "label": "Full width button on mobile"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button background color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Button border width",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Button border color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "button_padding_x",
+      "min": 12,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Button horizontal padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "button_padding_y",
+      "min": 1,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Button vertical padding",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Button font size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "button_font_size_mobile",
+      "min": 8,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Button font size - Mobile",
+      "default": 14
+    },
+    {
+      "type": "font_picker",
+      "id": "button_font_family",
+      "label": "Button Text Font Family",
+      "default": "assistant_n4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Vison Header"
+    }
+  ]
+}
+{% endschema %}

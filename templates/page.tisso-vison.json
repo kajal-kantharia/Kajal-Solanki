@@ -7,17 +7,216 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-{
+ {
   "sections": {
-    "main": {
-      "type": "main-page",
+    "vison-header": {
+      "type": "vison-header",
       "settings": {
-        "padding_top": 28,
-        "padding_bottom": 28
+        "container": false,
+        "container_width": "1280px",
+        "background_color": "#f5f5f5",
+        "padding_top": 10,
+        "padding_bottom": 10,
+        "mobile_padding_top": 0,
+        "mobile_padding_bottom": 0,
+        "logo": "shopify://shop_images/Group_1000007777.svg",
+        "logo_width": 150,
+        "logo_width_mobile": 110,
+        "text": "Find the ideal gift for your loved ones.",
+        "text_family": "jost_n4",
+        "text_size": 16,
+        "text_alignment": "center",
+        "text_color": "#000000",
+        "button_label": "CHOOSE GIFT",
+        "button_link": "/products/tissot-vison",
+        "button_open_new_tab": false,
+        "button_full_width": true,
+        "button_bg_color": "#fff544",
+        "button_text_color": "#000000",
+        "button_border_width": 0,
+        "button_border_color": "#000000",
+        "button_border_radius": 0,
+        "button_padding_x": 30,
+        "button_padding_y": 8,
+        "button_font_size": 16,
+        "button_font_size_mobile": 14,
+        "button_font_family": "jost_n4"
+      }
+    },
+    "vison_banner_tAh8ch": {
+      "type": "vison-banner",
+      "blocks": {
+        "slide_GwAVBf": {
+          "type": "slide",
+          "settings": {
+            "image_desktop": "shopify://shop_images/Group_1000008197.png",
+            "image_mobile": "shopify://shop_images/image_1.png",
+            "content_position_desktop": "bottom-left",
+            "content_position_mobile": "top-center",
+            "text_alignment_desktop": "left",
+            "text_alignment_mobile": "center",
+            "content_width": 540,
+            "content_padding_x": 0,
+            "content_padding_y": 40,
+            "heading": "The Gift Guide",
+            "heading_size": 70,
+            "heading_size_mobile": 30,
+            "heading_spacing": 20,
+            "heading_color": "#000000",
+            "heading_font_family": "jost_n5",
+            "description": "<p>Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.</p>",
+            "description_mobile": "<p>Discover Joy: Your Ultimate Holiday Gift Destination..</p>",
+            "description_size": 20,
+            "description_size_mobile": 16,
+            "description_spacing": 32,
+            "description_font_family": "jost_n4",
+            "description_color": "#000000",
+            "show_button": true,
+            "button_label": "SHOP NOW",
+            "button_link": "shopify://collections",
+            "button_open_new_tab": false,
+            "button_bg": "#000000",
+            "button_color": "#ffffff",
+            "button_bg_hover_color": "#fff544",
+            "button_border_width": 0,
+            "button_border": "#000000",
+            "button_radius": 0,
+            "button_padding_x": 30,
+            "button_padding_y": 8,
+            "button_font_size": 16,
+            "button_font_size_mobile": 14,
+            "button_font_family": "jost_n4"
+          }
+        }
+      },
+      "block_order": [
+        "slide_GwAVBf"
+      ],
+      "name": "Vison Banner",
+      "settings": {
+        "container": false,
+        "container_width": "1280px",
+        "height_desktop": 780,
+        "height_mobile": 440,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "mobile_padding_top": 0,
+        "mobile_padding_bottom": 0,
+        "autoplay": true,
+        "autoplay_speed": 2000,
+        "loop": true,
+        "transition_speed": 600,
+        "effect": "slide",
+        "show_navigation": false,
+        "navigation_color": "#000000",
+        "show_pagination": true,
+        "pagination_color": "#000000",
+        "show_arrow": true,
+        "padding_top_message_desktop": 8,
+        "padding_bottom_message_desktop": 8,
+        "padding_top_message_mobile": 5,
+        "padding_bottom_message_mobile": 5,
+        "bg_color": "#f5f5f5",
+        "message": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL",
+        "message_mobile": "SUSTAINABLE, ETHICALLY MADE ACTIVEWEAR",
+        "message_size": 16,
+        "message_size_mobile": 14,
+        "message_color": "#000000",
+        "message_font_family": "jost_n4",
+        "text_alignment": "center"
+      }
+    },
+    "vison_products_grid_eWwBCH": {
+      "type": "vison-products-grid",
+      "blocks": {
+        "product_WfpMHW": {
+          "type": "product",
+          "settings": {
+            "product": "black-leather-bag",
+            "image_position": "center",
+            "hotspot_x": 60,
+            "hotspot_y": 58
+          }
+        },
+        "product_4hthq6": {
+          "type": "product",
+          "settings": {
+            "product": "blue-silk-tuxedo",
+            "image_position": "center",
+            "hotspot_x": 87,
+            "hotspot_y": 54
+          }
+        },
+        "product_qimz6F": {
+          "type": "product",
+          "settings": {
+            "product": "chequered-red-shirt",
+            "image_position": "center",
+            "hotspot_x": 62,
+            "hotspot_y": 25
+          }
+        },
+        "product_eeBPMm": {
+          "type": "product",
+          "settings": {
+            "product": "classic-leather-jacket",
+            "image_position": "center",
+            "hotspot_x": 73,
+            "hotspot_y": 20
+          }
+        },
+        "product_xkVJVy": {
+          "type": "product",
+          "settings": {
+            "product": "classic-varsity-top",
+            "image_position": "center",
+            "hotspot_x": 52,
+            "hotspot_y": 25
+          }
+        },
+        "product_4zJbey": {
+          "type": "product",
+          "settings": {
+            "product": "dark-denim-top",
+            "image_position": "center",
+            "hotspot_x": 80,
+            "hotspot_y": 45
+          }
+        }
+      },
+      "block_order": [
+        "product_WfpMHW",
+        "product_4hthq6",
+        "product_qimz6F",
+        "product_eeBPMm",
+        "product_xkVJVy",
+        "product_4zJbey"
+      ],
+      "name": "Vison Products Grid",
+      "settings": {
+        "container": false,
+        "container_width": "1280px",
+        "image_ratio": "1 / 1",
+        "grid_gap": 15,
+        "grid_gap_mobile": 5,
+        "padding_top": 30,
+        "padding_bottom": 30,
+        "padding_top_mobile": 20,
+        "padding_bottom_mobile": 20,
+        "heading": "Tisso vison in the wild",
+        "heading_size": 36,
+        "heading_size_mobile": 24,
+        "heading_spacing": 20,
+        "heading_color": "#000000",
+        "heading_font_family": "jost_n4",
+        "heading_alignment": "left",
+        "heading_alignment_mobile": "center"
       }
     }
   },
   "order": [
-    "main"
+    "vison-header",
+    "vison_banner_tAh8ch",
+    "vison_products_grid_eWwBCH"
   ]
 }

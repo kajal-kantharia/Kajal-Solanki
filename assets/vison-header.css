@@ -1,0 +1,187 @@
+.vison-header {
+  width: 100%;
+}
+/* Flex row holding logo, text, and button */
+.vison-header__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+/* ── Logo ── */
+.vison-header__logo-link {
+  display: inline-block;
+  line-height: 0;
+  text-decoration: none;
+}
+
+.vison-header__logo-image {
+  width: var(--vison-header-logo-width-mobile, 90px);
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+.vison-header__logo-text {
+  margin: 0;
+}
+/* ── Text ── */
+.vison-header__text {
+  margin: 0;
+  flex: 1;
+/* Text column grows to fill available space */
+  font-size: var(--vison-header-text-size, 16px);
+  color: var(--vison-header-text-color, currentColor);
+  max-width: var(--vison-header-text-max-width, 500px);
+  line-height: 1.4;
+  font-family: var(--vison-header-text-font);
+  font-weight: var(--vison-header-text-font-weight);
+}
+/* ── Button ── */
+.vison-header__button {
+  flex-shrink: 0;
+}
+
+.vison-header__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: var(--vison-header-btn-font-size, 14px);
+  padding: var(--vison-header-btn-padding-y, 12px) var(--vison-header-btn-padding-x, 24px);
+  border-radius: var(--vison-header-btn-radius);
+  background-color: var(--vison-header-btn-bg);
+  color: var(--vison-header-btn-text, #ffffff);
+  border: var(--vison-header-btn-border-width) solid var(--vison-header-btn-border);
+  text-transform: uppercase;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  font-family: var(--vison-header-btn-font);
+}
+.vison-header__btn:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background-color: #000;
+  transition: all 0.3s;
+  border-radius: var(--vison-header-btn-radius);
+  border: var(--vison-header-btn-border-width) solid var(--vison-header-btn-border);
+  z-index: -1;
+}
+.vison-header__btn:hover {
+  color: #fff;
+}
+
+.vison-header__btn:hover svg,
+.vison-header__btn:hover svg path,
+.vison-header__btn:hover svg polygon {
+  fill: #fff;
+}
+.vison-header__btn:hover:before {
+  width: 100%;
+}
+.vison-header__btn:hover {
+  opacity: 0.85;
+}
+/* Shown when button has a label but no link URL */
+.vison-header__btn[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.vison-header__button_text {
+  margin-right: 10px;
+}
+
+/* Hide mobile elements on desktop */
+.vison-header__mobile-top, .vison-header__drawer {
+  display: none;
+}
+
+.vison-header__logo-image {
+  width: var(--vison-header-logo-width, 120px);
+}
+.vison-header__content--desktop-center .vison-header__text {
+  max-width: 100%;
+}
+
+/* ── Mobile layouts (< 750px) ── */
+@media screen and (max-width: 749px) {
+  .vison-header__content {
+      display: none;
+  }
+  /* Top bar */
+  .vison-header__mobile-top {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      min-height: 60px;
+  }
+  /* Burger button */
+  .vison-header__mobile-toggle {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+  /* Center logo */
+  .vison-header__mobile-top .vison-header__logo-link {
+      display: flex;
+      justify-content: center;
+  }
+  /* Icons */
+  .vison-header__close-icon {
+      display: none;
+  }
+  .vison-header__mobile-toggle.is-open .vison-header__menu-icon {
+      display: none;
+  }
+  .vison-header__mobile-toggle.is-open .vison-header__close-icon {
+      display: block;
+  }
+  /* Drawer */
+  .vison-header__drawer {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: rgb(var(--color-background));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    z-index: 999;
+  }
+  .vison-header__drawer.is-open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+  }
+  /* Vertical stack: logo → text → button */
+  .vison-header__btn {
+      font-size: var(--vison-header-btn-font-size-mobile);
+  }
+  .vison-header__btn--full-width {
+      width: 100%;
+  }
+}
