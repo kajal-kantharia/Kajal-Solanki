@@ -15,6 +15,20 @@
     overflow: hidden;
   }
 
+  .shopify-section-message-{{ section.id }} .container,
+  .vison-gift-banner-{{ section.id }} .container {
+    max-width: {{ section.settings.container_width }};
+    margin: 0 auto;
+    padding: 0 15px;
+    width: 100%;
+  }
+
+  .shopify-section-message-{{ section.id }} .fluid-container,
+  .vison-gift-banner-{{ section.id }} .fluid-container {
+    padding: 0 15px;
+    width: 100%;
+  }
+
   .vison-gift-banner-{{ section.id }} .vison-gift-banner__swiper {
     width: 100%;
   }
@@ -276,13 +290,13 @@
           {% style %}
             .vison-banner-slide-{{ block.id }} .vison-gift-banner__container {
               min-height: {{ section.settings.height_desktop }}px;
-              padding: {{ block.settings.content_padding_y }}px {{ block.settings.content_padding_x }}px;
               justify-content: {{ desktop_justify }};
               align-items: {{ desktop_align }};
             }
         
             .vison-banner-slide-{{ block.id }} .vison-gift-banner__content {
               max-width: {{ block.settings.content_width }}px;
+              padding: {{ block.settings.content_padding_vertical }}px {{ block.settings.content_padding_horizontal }}px;
               text-align: {{ block.settings.text_alignment_desktop }};
             }
         
@@ -392,48 +406,50 @@
             <div
               class="vison-gift-banner__container"
             >
-              <div
-                class="vison-gift-banner__content"
-              >
-                {%- if block.settings.heading != blank -%}
-                  <h2
-                    class="vison-gift-banner__heading"
-                  >
-                    {{ block.settings.heading | newline_to_br }}
-                  </h2>
-                {%- endif -%}
-
-                {%- if block.settings.description != blank -%}
-                  <div
-                    class="vison-gift-banner__description rte"
-                  >
-                    <span class="vison-description_text">{{ block.settings.description }}</span>
-                    <span class="vison-description_text_mobile">{{ block.settings.description_mobile }}</span>
-                  </div>
-                {%- endif -%}
-
-                {%- if block.settings.show_button and block.settings.button_label != blank -%}
-                  <div class="vison-gift-banner__button">
-                    <a
-                      {% if block.settings.button_link == blank %}
-                        role="link" aria-disabled="true"
-                      {% else %}
-                        href="{{ block.settings.button_link }}"
-                      {% endif %}
-                      class="vison-gift-banner__btn"
-                      {% if block.settings.button_open_new_tab and block.settings.button_link != blank %}
-                        target="_blank" rel="noopener noreferrer"
-                      {% endif %}
+              <div class="{% if section.settings.container %}fluid-container{% else %}container{% endif %}">
+                <div
+                  class="vison-gift-banner__content"
+                >
+                  {%- if block.settings.heading != blank -%}
+                    <h2
+                      class="vison-gift-banner__heading"
                     >
-                      <span class="vison-gift-banner__button_text">
-                        {{- block.settings.button_label | escape -}}
-                      </span>
-                      {%- if section.settings.show_arrow -%}
-                        {{- 'arrow.svg' | inline_asset_content -}}
-                      {%- endif -%}
-                    </a>
-                  </div>
-                {%- endif -%}
+                      {{ block.settings.heading | newline_to_br }}
+                    </h2>
+                  {%- endif -%}
+
+                  {%- if block.settings.description != blank -%}
+                    <div
+                      class="vison-gift-banner__description rte"
+                    >
+                      <span class="vison-description_text">{{ block.settings.description }}</span>
+                      <span class="vison-description_text_mobile">{{ block.settings.description_mobile }}</span>
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.show_button and block.settings.button_label != blank -%}
+                    <div class="vison-gift-banner__button">
+                      <a
+                        {% if block.settings.button_link == blank %}
+                          role="link" aria-disabled="true"
+                        {% else %}
+                          href="{{ block.settings.button_link }}"
+                        {% endif %}
+                        class="vison-gift-banner__btn"
+                        {% if block.settings.button_open_new_tab and block.settings.button_link != blank %}
+                          target="_blank" rel="noopener noreferrer"
+                        {% endif %}
+                      >
+                        <span class="vison-gift-banner__button_text">
+                          {{- block.settings.button_label | escape -}}
+                        </span>
+                        {%- if section.settings.show_arrow -%}
+                          {{- 'arrow.svg' | inline_asset_content -}}
+                        {%- endif -%}
+                      </a>
+                    </div>
+                  {%- endif -%}
+                </div>
               </div>
             </div>
           </div>
@@ -464,12 +480,6 @@
       padding-bottom: {{ section.settings.padding_bottom_message_desktop }}px;
       background-color: {{ section.settings.bg_color }};
     }
-
-    .shopify-section-message-{{ section.id }} .container {
-      padding: 0 15px;
-      max-width: {{ section.settings.container_width }};
-      width: 100%;
-    }
     
     .shopify-section-message-{{ section.id }} .vison-gift-message_text_mobile {
       display: none;
@@ -486,10 +496,6 @@
       .shopify-section-message-{{ section.id }} {
         padding-top: {{ section.settings.padding_top_message_mobile }}px;
         padding-bottom: {{ section.settings.padding_bottom_message_mobile }}px;
-      }
-
-      .shopify-section-message-{{ section.id }} .container {
-        margin: 0 auto;
       }
 
       .shopify-section-message-{{ section.id }} .vison-gift-message_text_mobile {
@@ -569,6 +575,18 @@
     {
       "type": "header",
       "content": "Section layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "container",
+      "label": "Full width container?",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "container_width",
+      "label": "Container Width in PX",
+      "default": "1280px"
     },
     {
       "type": "range",
@@ -916,23 +934,23 @@
         },
         {
           "type": "range",
-          "id": "content_padding_x",
+          "id": "content_padding_horizontal",
           "label": "Horizontal padding",
-          "min": 16,
+          "min": 0,
           "max": 100,
           "step": 1,
           "unit": "px",
-          "default": 48
+          "default": 0
         },
         {
           "type": "range",
-          "id": "content_padding_y",
+          "id": "content_padding_vertical",
           "label": "Vertical padding",
-          "min": 16,
+          "min": 0,
           "max": 100,
           "step": 1,
           "unit": "px",
-          "default": 48
+          "default": 40
         },
         {
           "type": "header",

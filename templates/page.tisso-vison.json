@@ -56,8 +56,8 @@
             "text_alignment_desktop": "left",
             "text_alignment_mobile": "center",
             "content_width": 540,
-            "content_padding_x": 48,
-            "content_padding_y": 48,
+            "content_padding_x": 0,
+            "content_padding_y": 40,
             "heading": "The Gift Guide",
             "heading_size": 70,
             "heading_size_mobile": 30,
@@ -65,6 +65,7 @@
             "heading_color": "#000000",
             "heading_font_family": "jost_n5",
             "description": "<p>Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.</p>",
+            "description_mobile": "<p>Discover Joy: Your Ultimate Holiday Gift Destination..</p>",
             "description_size": 20,
             "description_size_mobile": 16,
             "description_spacing": 32,
@@ -93,6 +94,8 @@
       ],
       "name": "Vison Banner",
       "settings": {
+        "container": false,
+        "container_width": "1280px",
         "height_desktop": 780,
         "height_mobile": 440,
         "padding_top": 0,
@@ -122,10 +125,97 @@
         "message_font_family": "jost_n4",
         "text_alignment": "center"
       }
+    },
+    "vison_products_grid_eWwBCH": {
+      "type": "vison-products-grid",
+      "blocks": {
+        "product_WfpMHW": {
+          "type": "product",
+          "settings": {
+            "product": "black-leather-bag",
+            "image_position": "center",
+            "hotspot_x": 60,
+            "hotspot_y": 58
+          }
+        },
+        "product_4hthq6": {
+          "type": "product",
+          "settings": {
+            "product": "blue-silk-tuxedo",
+            "image_position": "center",
+            "hotspot_x": 87,
+            "hotspot_y": 54
+          }
+        },
+        "product_qimz6F": {
+          "type": "product",
+          "settings": {
+            "product": "chequered-red-shirt",
+            "image_position": "center",
+            "hotspot_x": 62,
+            "hotspot_y": 25
+          }
+        },
+        "product_eeBPMm": {
+          "type": "product",
+          "settings": {
+            "product": "classic-leather-jacket",
+            "image_position": "center",
+            "hotspot_x": 73,
+            "hotspot_y": 20
+          }
+        },
+        "product_xkVJVy": {
+          "type": "product",
+          "settings": {
+            "product": "classic-varsity-top",
+            "image_position": "center",
+            "hotspot_x": 52,
+            "hotspot_y": 25
+          }
+        },
+        "product_4zJbey": {
+          "type": "product",
+          "settings": {
+            "product": "dark-denim-top",
+            "image_position": "center",
+            "hotspot_x": 80,
+            "hotspot_y": 45
+          }
+        }
+      },
+      "block_order": [
+        "product_WfpMHW",
+        "product_4hthq6",
+        "product_qimz6F",
+        "product_eeBPMm",
+        "product_xkVJVy",
+        "product_4zJbey"
+      ],
+      "name": "Vison Products Grid",
+      "settings": {
+        "container": false,
+        "container_width": "1280px",
+        "image_ratio": "1 / 1",
+        "grid_gap": 20,
+        "padding_top": 30,
+        "padding_bottom": 30,
+        "padding_top_mobile": 20,
+        "padding_bottom_mobile": 20,
+        "heading": "Tisso vison in the wild",
+        "heading_size": 36,
+        "heading_size_mobile": 24,
+        "heading_spacing": 20,
+        "heading_color": "#000000",
+        "heading_font_family": "jost_n4",
+        "heading_alignment": "left",
+        "heading_alignment_mobile": "center"
+      }
     }
   },
   "order": [
     "vison-header",
-    "vison_banner_tAh8ch"
+    "vison_banner_tAh8ch",
+    "vison_products_grid_eWwBCH"
   ]
 }

@@ -1,0 +1,459 @@
+{{ 'vison-products-grid.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'vison-products-grid.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+  }
+
+  .vison-grid-{{ section.id }} {
+    --stl-gap: {{ section.settings.grid_gap }}px;
+    --stl-aspect-ratio: {{ section.settings.image_ratio }};
+  }
+
+  .vison-grid-{{ section.id }} .container {
+    max-width: {{ section.settings.container_width }};
+    margin: 0 auto;
+    padding: 0 15px;
+    width: 100%;
+  }
+
+  .vison-grid-{{ section.id }} .fluid-container {
+    padding: 0 15px;
+    width: 100%;
+  }
+
+  .vison-grid-{{ section.id }} .vison-products-grid__heading {
+    margin-bottom: {{ section.settings.heading_spacing }}px;
+    font-size: {{ section.settings.heading_size_mobile }}px;
+    color: {{ section.settings.heading_color }};
+    font-family: {{ section.settings.heading_font_family.family }}, {{ section.settings.heading_font_family.fallback_families }};
+    text-align: {{ section.settings.heading_alignment_mobile }};
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+
+    .vison-grid-{{ section.id }} .vison-products-grid__heading {
+        font-size: {{ section.settings.heading_size }}px;
+        text-align: {{ section.settings.heading_alignment }};
+    }
+  }
+{%- endstyle -%}
+
+<section class="vison-grid-{{ section.id }} section-{{ section.id }}-padding">
+    <vison-products-grid
+        id="VisonGrid-{{ section.id }}"
+        class="vison-products-grid"
+    >
+        <div class="{% if section.settings.container %}fluid-container{% else %}container{% endif %}">  
+            {%- if section.settings.heading != blank -%}
+                <h2 class="vison-products-grid__heading">
+                    {{ section.settings.heading }}
+                </h2>
+            {%- endif -%}
+
+            <div class="vison-products-grid__grid" role="list">
+            {%- for block in section.blocks -%}
+                {%- liquid
+                assign block_product = block.settings.product
+                assign block_image = block.settings.image
+                if block_image == blank and block_product != blank
+                    assign block_image = block_product.featured_image
+                endif
+                -%}
+
+                <div
+                    class="vison-products-grid__item"
+                    role="listitem"
+                    data-shop-look-block
+                    {{ block.shopify_attributes }}
+                    style="
+                        --hotspot-x: {{ block.settings.hotspot_x }}%;
+                        --hotspot-y: {{ block.settings.hotspot_y }}%;
+                        --stl-image-position: {{ block.settings.image_position }};
+                    "
+                >
+                <div class="vison-products-grid__media-wrapper">
+                    {%- if block_image != blank -%}
+                        {{
+                        block_image
+                        | image_url: width: 1100
+                        | image_tag:
+                            loading: 'lazy',
+                            class: 'vison-products-grid__media',
+                            sizes: '(min-width: 750px) 33vw, 50vw',
+                            widths: '375, 550, 750, 900, 1100',
+                            alt: block_product.title
+                        }}
+                    {%- else -%}
+                        <div class="vison-products-grid__placeholder">
+                            {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                        </div>
+                    {%- endif -%}
+                </div>
+
+                <button
+                    type="button"
+                    class="vison-products-grid__hotspot"
+                    data-shop-look-trigger
+                    aria-label="{% if block_product != blank %}Open {{ block_product.title | escape }} details{% else %}Select a product for this block{% endif %}"
+                    {% if block_product == blank %}
+                    disabled
+                    {% endif %}
+                >
+                    <span class="vison-products-grid__hotspot-icon" aria-hidden="true"></span>
+                </button>
+
+                {%- if block_product != blank -%}
+                    <script type="application/json" data-product-json>
+                    {
+                        "id": {{ block_product.id | json }},
+                        "title": {{ block_product.title | json }},
+                        "price": {{ block_product.selected_or_first_available_variant.price | money | json }},
+                        "description": {{ block_product.description | strip_html | truncate: 140 | json }},
+                        "image": {% if block_product.featured_image != blank %}{{ block_product.featured_image | image_url: width: 360 | json }}{% else %}""{% endif %},
+                        "hasOnlyDefaultVariant": {{ block_product.has_only_default_variant | json }},
+                        "options": [
+                        {%- unless block_product.has_only_default_variant -%}
+                            {%- for option in block_product.options_with_values -%}
+                            {
+                                "name": {{ option.name | json }},
+                                "values": [
+                                {%- for value in option.values -%}
+                                    {{ value | json }}{% unless forloop.last %},{% endunless %}
+                                {%- endfor -%}
+                                ]
+                            }{% unless forloop.last %},{% endunless %}
+                            {%- endfor -%}
+                        {%- endunless -%}
+                        ],
+                        "variants": [
+                        {%- for variant in block_product.variants -%}
+                            {
+                            "id": {{ variant.id | json }},
+                            "available": {{ variant.available | json }},
+                            "price": {{ variant.price | money | json }},
+                            "options": {{ variant.options | json }}
+                            }{% unless forloop.last %},{% endunless %}
+                        {%- endfor -%}
+                        ]
+                    }
+                    </script>
+                {%- endif -%}
+                </div>
+            {%- endfor -%}
+            </div>
+        </div>
+
+        <div class="vison-products-grid-modal" data-vison-products-grid-modal hidden>
+            <button class="vison-products-grid-modal__overlay" type="button" data-modal-close aria-label="Close product details"></button>
+            <div
+            class="vison-products-grid-modal__dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="VisonGridModalTitle-{{ section.id }}"
+            >
+            <button
+                class="vison-products-grid-modal__close"
+                type="button"
+                data-modal-close
+                data-modal-close-button
+                aria-label="Close product details"
+            >
+                &times;
+            </button>
+
+            <div class="vison-products-grid-modal__product">
+                <img class="vison-products-grid-modal__image" data-modal-image src="" alt="" width="120" height="120" hidden>
+                <div>
+                <h3 id="VisonGridModalTitle-{{ section.id }}" class="vison-products-grid-modal__title" data-modal-title></h3>
+                <p class="vison-products-grid-modal__price" data-modal-price></p>
+                <p class="vison-products-grid-modal__description" data-modal-description></p>
+                </div>
+            </div>
+
+            <form data-modal-form>
+                <div data-modal-options></div>
+                <input type="hidden" name="id" data-variant-id>
+                <button class="vison-products-grid-modal__button" type="submit" data-modal-submit>
+                <span data-submit-text>Add to cart</span>
+                <span class="vison-products-grid-modal__arrow" aria-hidden="true"></span>
+                </button>
+                <p class="vison-products-grid-modal__message" data-modal-message role="status" aria-live="polite"></p>
+            </form>
+            </div>
+        </div>
+    </vison-products-grid>
+</section>
+
+{% schema %}
+{
+  "name": "Vison Products Grid",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 12,
+  "settings": [
+    {
+        "type": "header",
+        "content": "Section layout"
+    },
+    {
+        "type": "checkbox",
+        "id": "container",
+        "label": "Full width container?",
+        "default": false
+    },
+    {
+        "type": "text",
+        "id": "container_width",
+        "label": "Container Width in PX",
+        "default": "1280px"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "default": "1 / 1",
+      "options": [
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "4 / 5",
+          "label": "Portrait"
+        },
+        {
+          "value": "3 / 2",
+          "label": "Landscape"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Grid gap",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top - Mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom - Mobile",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Heading content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Tisso vison in the wild",
+      "info": "Press Enter for a new line."
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size (desktop)",
+      "min": 24,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "Heading size (mobile)",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 42
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "Space below heading",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font_family",
+      "label": "Heading font family",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Desktop Heading alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment_mobile",
+      "label": "Mobile Heading alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product block",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Grid image"
+        },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image position",
+          "default": "center",
+          "options": [
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "hotspot_x",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Plus button horizontal position",
+          "default": 60
+        },
+        {
+          "type": "range",
+          "id": "hotspot_y",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Plus button vertical position",
+          "default": 50
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Vison Products Grid",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
