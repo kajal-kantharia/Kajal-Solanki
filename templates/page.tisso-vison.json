@@ -56,6 +56,8 @@
             "text_alignment_desktop": "left",
             "text_alignment_mobile": "center",
             "content_width": 540,
+            "content_padding_horizontal": 0,
+            "content_padding_vertical": 40,
             "heading": "The Gift Guide",
             "heading_size": 70,
             "heading_size_mobile": 30,
@@ -94,7 +96,7 @@
       "settings": {
         "container": false,
         "container_width": "1280px",
-        "height_desktop": 780,
+        "height_desktop": 680,
         "height_mobile": 440,
         "padding_top": 0,
         "padding_bottom": 0,
