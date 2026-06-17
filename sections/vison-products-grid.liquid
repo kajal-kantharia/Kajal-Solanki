@@ -9,6 +9,7 @@
 
   .vison-grid-{{ section.id }} {
     --stl-gap: {{ section.settings.grid_gap }}px;
+    --stl-gap-mobile: {{ section.settings.grid_gap_mobile }}px;
     --stl-aspect-ratio: {{ section.settings.image_ratio }};
   }
 
@@ -70,7 +71,7 @@
                 <div
                     class="vison-products-grid__item"
                     role="listitem"
-                    data-shop-look-block
+                    data-vison-products-block
                     {{ block.shopify_attributes }}
                     style="
                         --hotspot-x: {{ block.settings.hotspot_x }}%;
@@ -100,7 +101,7 @@
                 <button
                     type="button"
                     class="vison-products-grid__hotspot"
-                    data-shop-look-trigger
+                    data-vison-products-trigger
                     aria-label="{% if block_product != blank %}Open {{ block_product.title | escape }} details{% else %}Select a product for this block{% endif %}"
                     {% if block_product == blank %}
                     disabled
@@ -165,7 +166,7 @@
                 data-modal-close-button
                 aria-label="Close product details"
             >
-                &times;
+                {{ 'close.svg' | inline_asset_content }}
             </button>
 
             <div class="vison-products-grid-modal__product">
@@ -181,8 +182,8 @@
                 <div data-modal-options></div>
                 <input type="hidden" name="id" data-variant-id>
                 <button class="vison-products-grid-modal__button" type="submit" data-modal-submit>
-                <span data-submit-text>Add to cart</span>
-                <span class="vison-products-grid-modal__arrow" aria-hidden="true"></span>
+                  <span data-submit-text class="vison-product__button_text">Add to cart</span>
+                  {{- 'arrow-white.svg' | inline_asset_content -}}
                 </button>
                 <p class="vison-products-grid-modal__message" data-modal-message role="status" aria-live="polite"></p>
             </form>
@@ -239,10 +240,20 @@
       "id": "grid_gap",
       "min": 0,
       "max": 40,
-      "step": 2,
+      "step": 1,
       "unit": "px",
       "label": "Grid gap",
-      "default": 20
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "grid_gap_mobile",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Grid gap",
+      "default": 5
     },
     {
       "type": "header",

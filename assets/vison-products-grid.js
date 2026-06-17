@@ -1,7 +1,7 @@
 class VisonProductsGrid extends HTMLElement {
     constructor() {
       super();
-      this.modal = this.querySelector('[data-shop-the-look-modal]');
+      this.modal = this.querySelector('[data-vison-products-grid-modal]');
       this.productImage = this.querySelector('[data-modal-image]');
       this.productTitle = this.querySelector('[data-modal-title]');
       this.productPrice = this.querySelector('[data-modal-price]');
@@ -18,7 +18,7 @@ class VisonProductsGrid extends HTMLElement {
     }
   
     connectedCallback() {
-      this.querySelectorAll('[data-shop-look-trigger]').forEach((trigger) => {
+      this.querySelectorAll('[data-vison-products-trigger]').forEach((trigger) => {
         trigger.addEventListener('click', () => this.openProduct(trigger));
       });
   
@@ -33,7 +33,7 @@ class VisonProductsGrid extends HTMLElement {
     }
   
     openProduct(trigger) {
-      const block = trigger.closest('[data-shop-look-block]');
+      const block = trigger.closest('[data-vison-products-block]');
       const productScript = block?.querySelector('[data-product-json]');
       if (!productScript) return;
   
@@ -45,10 +45,9 @@ class VisonProductsGrid extends HTMLElement {
       }
   
       this.activeTrigger = trigger;
-      const firstAvailableVariant =
-        this.currentProduct.variants.find((variant) => variant.available) || this.currentProduct.variants[0];
-  
-      this.selectedOptions = firstAvailableVariant?.options ? [...firstAvailableVariant.options] : [];
+      this.selectedOptions = this.currentProduct.hasOnlyDefaultVariant
+        ? [...(this.currentProduct.variants[0]?.options || [])]
+        : new Array(this.currentProduct.options.length).fill('');
       this.renderProduct();
       this.openModal();
     }
@@ -67,33 +66,46 @@ class VisonProductsGrid extends HTMLElement {
   
       product.options.forEach((option, optionIndex) => {
         const optionElement = document.createElement('div');
-        optionElement.className = 'shop-the-look-modal__option';
+        optionElement.className = 'vison-products-grid-modal__option';
   
         const label = document.createElement('label');
-        label.className = 'shop-the-look-modal__label';
+        label.className = 'vison-products-grid-modal__label';
         label.textContent = option.name;
         optionElement.appendChild(label);
   
-        if (optionIndex === 0 && option.values.length <= 4) {
-          const swatches = document.createElement('div');
-          swatches.className = 'shop-the-look-modal__swatches';
+        if (this.isColorOption(option.name)) {
+          const swatches = document.createElement('fieldset');
+          swatches.className = 'vison-products-grid-modal__swatches';
+          swatches.setAttribute('aria-label', option.name);
+  
           option.values.forEach((value) => {
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.className = 'shop-the-look-modal__swatch';
-            button.textContent = value;
-            button.dataset.optionIndex = optionIndex;
-            button.dataset.optionValue = value;
-            if (this.selectedOptions[optionIndex] === value) button.classList.add('is-selected');
-            button.addEventListener('click', () => this.selectOption(optionIndex, value));
-            swatches.appendChild(button);
+            const radioId = `${this.id || 'vison-products-grid'}-${optionIndex}-${this.slugify(value)}`;
+            const radioLabel = document.createElement('label');
+            radioLabel.className = 'vison-products-grid-modal__swatch';
+            radioLabel.setAttribute('for', radioId);
+  
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.id = radioId;
+            radio.name = `option-${optionIndex}`;
+            radio.value = value;
+            radio.checked = this.selectedOptions[optionIndex] === value;
+            radio.addEventListener('change', () => this.selectOption(optionIndex, value));
+  
+            const radioText = document.createElement('span');
+            radioText.textContent = value;
+            radioText.style.setProperty('--swatch-color', this.getColorValue(value));
+  
+            radioLabel.appendChild(radio);
+            radioLabel.appendChild(radioText);
+            swatches.appendChild(radioLabel);
           });
           optionElement.appendChild(swatches);
         } else {
           const selectWrap = document.createElement('div');
-          selectWrap.className = 'shop-the-look-modal__select-wrap';
+          selectWrap.className = 'vison-products-grid-modal__select-wrap';
           const select = document.createElement('select');
-          select.className = 'shop-the-look-modal__select';
+          select.className = 'vison-products-grid-modal__select';
           select.dataset.optionIndex = optionIndex;
           select.setAttribute('aria-label', option.name);
   
@@ -101,6 +113,7 @@ class VisonProductsGrid extends HTMLElement {
           placeholder.value = '';
           placeholder.textContent = `Choose your ${option.name.toLowerCase()}`;
           placeholder.disabled = true;
+          placeholder.selected = !this.selectedOptions[optionIndex];
           select.appendChild(placeholder);
   
           option.values.forEach((value) => {
@@ -127,7 +140,51 @@ class VisonProductsGrid extends HTMLElement {
       this.renderProduct();
     }
   
+    isColorOption(optionName) {
+      return ['color', 'colour'].includes(optionName.trim().toLowerCase());
+    }
+  
+    slugify(value) {
+      return String(value)
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+    }
+  
+    getColorValue(value) {
+      const color = String(value).trim().toLowerCase();
+      const colorMap = {
+        beige: '#d8c4a8',
+        black: '#000000',
+        blue: '#174e9a',
+        brown: '#7a4f2a',
+        cream: '#f4ead7',
+        gold: '#c9a227',
+        green: '#2f6f4e',
+        grey: '#8f8f8f',
+        gray: '#8f8f8f',
+        navy: '#0f2748',
+        orange: '#d9742f',
+        pink: '#d989a8',
+        purple: '#6c4a8f',
+        red: '#b3262d',
+        silver: '#b9b9b9',
+        white: '#ffffff',
+        yellow: '#e0bd36',
+      };
+  
+      return colorMap[color] || color;
+    }
+  
+    hasSelectedRequiredOptions() {
+      if (this.currentProduct?.hasOnlyDefaultVariant) return true;
+      return this.currentProduct?.options.every((_, index) => Boolean(this.selectedOptions[index]));
+    }
+  
     findSelectedVariant() {
+      if (!this.hasSelectedRequiredOptions()) return null;
+  
       return this.currentProduct?.variants.find((variant) => {
         return variant.options.every((option, index) => option === this.selectedOptions[index]);
       });
@@ -140,17 +197,19 @@ class VisonProductsGrid extends HTMLElement {
       this.variantInput.value = variant?.id || '';
       this.productPrice.textContent = variant?.price || this.currentProduct.price || '';
       this.submitButton.disabled = !isAvailable;
-      this.submitButton.querySelector('[data-submit-text]').textContent = isAvailable ? 'Add to cart' : 'Unavailable';
+      this.submitButton.setAttribute('aria-disabled', String(!isAvailable));
+      this.submitButton.querySelector('[data-submit-text]').textContent =
+        !this.hasSelectedRequiredOptions() || isAvailable ? 'Add to cart' : 'Unavailable';
       this.message.textContent = '';
     }
   
     openModal() {
       this.modal.classList.add('is-open');
       this.modal.removeAttribute('hidden');
-      document.body.classList.add('shop-the-look-modal-open');
+      document.body.classList.add('vison-products-grid-modal-open');
       const closeButton = this.querySelector('[data-modal-close-button]');
       if (window.trapFocus) {
-        window.trapFocus(this.modal.querySelector('.shop-the-look-modal__dialog'), closeButton);
+        window.trapFocus(this.modal.querySelector('.vison-products-grid-modal__dialog'), closeButton);
       } else {
         closeButton?.focus();
       }
@@ -159,7 +218,7 @@ class VisonProductsGrid extends HTMLElement {
     closeModal() {
       this.modal.classList.remove('is-open');
       this.modal.setAttribute('hidden', '');
-      document.body.classList.remove('shop-the-look-modal-open');
+      document.body.classList.remove('vison-products-grid-modal-open');
       window.removeTrapFocus?.(this.activeTrigger);
       this.activeTrigger?.focus();
     }
@@ -212,6 +271,7 @@ class VisonProductsGrid extends HTMLElement {
         })
         .finally(() => {
           this.submitButton.disabled = !this.findSelectedVariant()?.available;
+          alert('Added to cart!');
         });
     }
   }
